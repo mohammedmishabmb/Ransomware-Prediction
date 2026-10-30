@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ransomware Prediction System</title>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        h1 {
+            text-align: center;
+            color: #f8fafc;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .upload-box {
+            border: 2px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 14px;
+            padding: 35px 20px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-box:hover {
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .upload-box h3 {
+            margin-top: 0;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .upload-box p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+            width: 100%;
+            max-width: 320px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #334155;
+            color: #f8fafc;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #475569;
+        }
+
+        button[type="submit"] {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            animation: pulseGlow 2.5s infinite;
+        }
+
+        button[type="submit"]:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        .result h2 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+        }
+
+        .result p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .safe {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+
+        .danger {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: fbb24;
+            color: #fbbf24;
+            font-size: 14px;
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        .details {
+            margin-top: 25px;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .details h3 {
+            color: #e2e8f0;
+            font-size: 16px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+        }
+
+        .table-wrapper {
+            max-height: 250px;
+            overflow-y: auto;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .details th,
+        .details td {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .details th {
+            background: rgba(15, 23, 42, 0.8);
+            color: #94a3b8;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .details tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .details tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .warning {
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Custom Scrollbar for Details table */
+        .table-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.4);
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ransomware Prediction System</h1>
+
+        <p class="subtitle">
+            AI-based static analysis using a trained Random Forest model
+        </p>
+
+        <form action="/predict" method="POST" enctype="multipart/form-data">
+            <div class="upload-box">
+                <h3>Upload a Windows Executable</h3>
+                <p>Supported file types: .exe and .dll</p>
+
+                <input
+                    type="file"
+                    name="file"
+                    accept=".exe,.dll"
+                    required
+                >
+
+                <br>
+
+                <button type="submit">
+                    Analyze File
+                </button>
+            </div>
+        </form>
+
+        {% if error %}
+            <div class="error">
+                <strong>Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+
+        {% if result %}
+            <div class="result {{ result_class }}">
+                <h2>{{ result }}</h2>
+
+                <p>
+                    <strong>File:</strong> {{ filename }}
+                </p>
+
+                {% if confidence is not none %}
+                    <p>
+                        <strong>Model confidence:</strong>
+                        {{ confidence }}%
+                    </p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if features %}
+            <div class="details">
+                <h3>Extracted PE Features</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value</th>
+                        </tr>
+
+                        {% for feature, value in features.items() %}
+                        <tr>
+                            <td>{{ feature }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        <p class="warning">
+            This is a research prototype. Files are analyzed using static
+            PE-header information and are not executed.
+        </p>
+    </div>
+</body>
+</html>
